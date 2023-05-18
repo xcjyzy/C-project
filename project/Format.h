@@ -1,4 +1,8 @@
-#include"Editor.h"
+#ifndef FORMAT_H
+#define FORMAT_H
+#include <afxdlgs.h>
+#include <commdlg.h>
+#include <string>
 using namespace std;
 
 class global_setting//东西不多，可以再加
@@ -17,7 +21,7 @@ protected:
 
 };
 
-global_setting global;//这里是全局设定，多文件则引用之
+
 
 class format//需要的格式差不多齐了
 {
@@ -32,22 +36,22 @@ public:
 	int indent;//段落缩进，默认为全局设定，不是段落开始句的时候，为-1
 	int spacing;//段落间距，默认为全局设定，不是段落开始句的时候，为-1
 
-	format(bool flag)//flag是段落起始标
-	{
-		color_r = 0; color_g = 0; color_b = 0;
-		size = global.size;
-		parastart_flag = flag;
-		if (flag == false)
-		{
-			indent = -1;
-			spacing = -1;
-		}
-		else
-		{
-			indent = global.indent;
-			spacing = global.spacing;
-		}
-	}
+	//format(bool flag)//flag是段落起始标
+	//{
+	//	color_r = 0; color_g = 0; color_b = 0;
+	//	size = global.size;
+	//	parastart_flag = flag;
+	//	if (flag == false)
+	//	{
+	//		indent = -1;
+	//		spacing = -1;
+	//	}
+	//	else
+	//	{
+	//		indent = global.indent;
+	//		spacing = global.spacing;
+	//	}
+	//}
 protected:
 
 };
@@ -60,14 +64,21 @@ public:
 	sentence* nextse;
 	bool parastart_flag;//段落标记，true代表这句话是一段开始
 	bool paraend_flag;//段落标志，true代表这句是一段的结束，要\n
-
 	bool cross_flag;//跨越标志，true代表这句话跨越了两个页面
-
 	format* format;//格式标记，注意，如果parastart_flag为true则这个格式还包括段落格式
 	//建议每次输出，看到parastart_flag为true就存储这句的格式，直到下一次parastart_flag为true，更新format即可
-
 	string statement;//无格式语句，string用的了就用，用不了就换格式，不过及时申请
-
+	sentence()
+	{
+		nextse = NULL;
+		parastart_flag = FALSE;
+		paraend_flag = FALSE;
+		cross_flag = FALSE;
+	}
+	~sentence()
+	{
+		delete nextse;
+	}
 protected:
 
 };
@@ -76,14 +87,18 @@ class passage
 {
 public:
 	sentence* firstse;//首段落，之后的段落用首段落延伸出去
+	sentence* laststse;//最后一句
 	global_setting* set;//本文章的全局设定
 	int total_word;//可能不用，总字数
 	passage()
 	{
-		firstse = NULL;
-		set = NULL;
+		firstse = new sentence;
+		set = new global_setting;
 		total_word = 0;
 	}
 protected:
 
 };
+
+
+#endif 

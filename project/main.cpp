@@ -1,5 +1,5 @@
-﻿#include"Editor.h"
-using namespace std;
+﻿using namespace std;
+#include"Editor.h"
 
 int main()
 {
